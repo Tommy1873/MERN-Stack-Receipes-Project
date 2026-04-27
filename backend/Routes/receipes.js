@@ -6,6 +6,6 @@ router.get('',ReceipeController.index);
 router.post('',ReceipeController.store);
 router.get('/:id',ReceipeController.show);
 router.patch('/:id',ReceipeController.update);
-router.delete('/:id',ReceipeController.delete);
+router.delete('/:id',ReceipeController.destroy);
 
 module.exports = router;
