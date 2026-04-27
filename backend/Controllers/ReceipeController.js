@@ -1,5 +1,5 @@
 const Receipe = require("../Models/Receipe");
-
+const mongoose = require("mongoose");
 const ReceipeController = {
     index : async (req,res) => {
         try 
@@ -54,7 +54,21 @@ const ReceipeController = {
         try
         {
             let id = req.params.id;
+            if(!mongoose.Types.ObjectId.isValid(id))
+            {
+                return res.status(400).json({
+                "success" : false,
+                "message" : "Not a valid id",
+                })
+            }
             let data = await Receipe.findById(id);
+            if(!data)
+            {
+                return res.status(404).json({
+                    "success" : false,
+                    "message" : "Receipe not found!",
+                })
+            }
             return res.json({
                 "success" : true,
                 "message" : "Receipe retrieved successfully",
@@ -68,13 +82,48 @@ const ReceipeController = {
             })
         }
     },
-    update : (req,res) => {
+    update : async (req,res) => {
+        let id = req.params.id;
+        if(!mongoose.Types.ObjectId.isValid(id))
+        {
+            return res.status(400).json({
+            "success" : false,
+            "message" : "Not a valid id",
+            })
+        }
+        let data = await Receipe.findByIdAndUpdate(id);
+        if(!data)
+        {
+            return res.status(404).json({
+                "success" : false,
+                "message" : "Receipe not found!",
+            })
+        }
         return res.json({
-            "message" : "updated success"
+            "success" : true,
+            "message" : "updated success",
+            data
         })
     },
-    destroy : (req,res) => {
+    destroy : async (req,res) => {
+        let id = req.params.id;
+        if(!mongoose.Types.ObjectId.isValid(id))
+        {
+            return res.status(400).json({
+            "success" : false,
+            "message" : "Not a valid id",
+            })
+        }
+        let data = await Receipe.findByIdAndDelete(id);
+        if(!data)
+        {
+            return res.status(404).json({
+                "success" : false,
+                "message" : "Receipe not found!",
+            })
+        }
         return res.json({
+            "success" : true,
             "message" : "delete success"
         })
     }
